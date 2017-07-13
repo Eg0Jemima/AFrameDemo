@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            AFRAME.registerComponent('cursor-scale', {
+                schema: {
+                    to: {default: '2.5 2.5 2.5'}
+                },
+                init: function () {
+                    // Do something when component first attached.
+                    var data = this.data;
+
+                    var mouseEnterAnim = document.createElement("a-animation");
+                    var mouseLeaveAnim = document.createElement("a-animation");
+                    var clickAnim = document.createElement("a-animation");
+
+                    mouseEnterAnim.setAttribute("attribute", "scale");
+                    mouseEnterAnim.setAttribute("begin", "mouseenter");
+                    mouseEnterAnim.setAttribute("dur", "100");
+                    mouseEnterAnim.setAttribute("to", "2.5 2.5 2.5");
+
+                    mouseLeaveAnim.setAttribute("attribute", "scale");
+                    mouseLeaveAnim.setAttribute("begin", "mouseleave");
+                    mouseLeaveAnim.setAttribute("dur", "300");
+                    mouseLeaveAnim.setAttribute("to", "1 1 1");
+
+                    clickAnim.setAttribute("attribute", "rotation");
+                    clickAnim.setAttribute("begin", "click");
+                    clickAnim.setAttribute("dur", "2000");
+                    clickAnim.setAttribute("to", "360 405 45");
+
+                    console.log(mouseEnterAnim);
+                    console.log(this.el);
+
+                    this.el.appendChild(mouseEnterAnim);
+                    this.el.appendChild(mouseLeaveAnim);
+                    this.el.appendChild(clickAnim);
+
+
+                    /*this.el.addEventListener("mouseenter", function(){
+                        this.setAttribute("scale", data.to);
+                    });
+                    this.el.addEventListener("mouseleave", function(){
+                        this.setAttribute("scale", data.default);
+                    }); */
+                }
+            });
+
+
+        </script>
+        <a-scene>
+            <a-assets>
+                <img id="boxTexture" src="https://i.imgur.com/mYmmbrp.jpg" crossorigin="true">
+                <img id="skyTexture" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg" crossorigin="true">
+                <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="true">
+            </a-assets>
+            <a-box src="#boxTexture" color="red" position="0 2 -5" rotation="0 45 45" scale="2 2 2" cursor-scale>
+                <a-animation attribute="position" to="0 2.2 -5" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
+                <!-- These animations are now added with the cursor-scale custom component I wrote!
+                <a-animation attribute="scale" begin="mouseenter" dur="300" to="2.3 2.3 2.3"></a-animation>
+                <a-animation attribute="scale" begin="mouseleave" dur="300" to="2 2 2"></a-animation>
+                <a-animation attribute="rotation" begin="click" dur="2000" to="360 405 45"></a-animation> -->
+            </a-box>
+            <a-sky src="#skyTexture"></a-sky>
+            <a-plane src="#groundTexture" height="30" width="30" rotation="-90 0 0" repeat="10 10"></a-plane>
+            <a-light type="ambient" color="#445451"></a-light>
+            <a-light type="point" intensity="2" position="2 4 4"></a-light>
+            <a-entity position="0 0 0">
+                <a-camera>
+                    <a-cursor color="yellow"></a-cursor>
+                </a-camera>
+            </a-entity>
+        </a-scene>
+        <script type="text/javascript">
+            /* Bad way of handling events - use custom components see cursor-scale component example above scene!
+            var myBox = document.querySelector("a-box");
+            myBox.addEventListener("mouseenter", function(){
+                myBox.setAttribute("scale", {x: 2.2, y:2.2, z:2.2});
+            });
+            myBox.addEventListener("mouseleave", function(){
+                myBox.setAttribute("scale", {x: 2, y:2, z:2});
+            }); */
+        </script>
+    </body>
+</html>
