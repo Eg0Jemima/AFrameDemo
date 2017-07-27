@@ -87,7 +87,7 @@
                         new THREE.MeshBasicMaterial( { map: texture5 } )
                     ];
 
-                    var material = new THREE.MeshFaceMaterial( materials );
+                    var material = new THREE.MultiMaterial( materials );
 
                     /* Example of transparent textures and coloring
                     var cubeMaterials = [
@@ -142,7 +142,7 @@
             <a-text value="Click Me!" color="#BBB" position="-0.9 0.2 -3" scale="1.5 1.5 1.5"></a-text>
             <!--<a-box color="blue" rotation="-90 0 0" position="0 1 -.5" scale=".5 .5 .5" grabbable stretchable></a-box>
             <a-sphere color="yellow" radius="2" position="0 1 -.5" scale=".2 .2 .2" grabbable stretchable></a-sphere>-->
-            <a-entity many-cube position = "0 1 -.5" grabbable stretchable></a-entity>
+            <a-entity id="many-cube" many-cube position = "0 1 -.5" grabbable stretchable></a-entity>
             <a-entity position="0 0 0">
                 <a-camera>
                     <a-cursor color="yellow"></a-cursor>
@@ -153,10 +153,28 @@
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
-            var myBox = document.querySelector("a-box");
-            myBox.addEventListener("trackpadmoved", function(){
-                myBox.setAttribute("scale", {x: 2.2, y:2.2, z:2.2});
+            var myBox = document.querySelector('#many-cube');
+            var controller1 = document.querySelector("#controller1");
+
+            //All values come from left hand controller
+            //Get axis values from controller1
+            controller1.addEventListener("axismove", function(e){
+                console.log("x = " + e.detail.axis[0]);
+                console.log("y = " + e.detail.axis[1]);
             });
+
+            //detect thumbstick press
+            controller1.addEventListener("thumbstickdown", function(e){
+                console.log(e);
+                myBox.setAttribute("scale", {x: 1, y:1, z:1});
+            });
+
+            //detect bottom grip press and scale custom box down
+            controller1.addEventListener("gripdown", function(e){
+                console.log(e);
+                myBox.setAttribute("scale", {x: 1, y:1, z:1});
+            });
+
             /*myBox.addEventListener("mouseleave", function(){
                 myBox.setAttribute("scale", {x: 2, y:2, z:2});
             }); */
