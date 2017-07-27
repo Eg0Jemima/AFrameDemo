@@ -4,6 +4,7 @@
         <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
         <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.8.6/dist/aframe-extras.min.js"></script>
         <script src="https://unpkg.com/super-hands@1.0.1/dist/super-hands.min.js"></script>
+        <script src="https://unpkg.com/aframe-cubemap-component@0.1.2/dist/aframe-cubemap-component.min.js"></script>
     </head>
     <body>
         <script type="text/javascript">
@@ -75,21 +76,22 @@
             <a-sound src="#spatialaudio" autoplay="true" position="0 0 0"></a-sound>
             <a-text value="Click Me!" color="#BBB" position="-0.9 0.2 -3" scale="1.5 1.5 1.5"></a-text>
             <a-box color="blue" rotation="-90 0 0" position="0 1 -.5" scale=".5 .5 .5" grabbable stretchable></a-box>
+            <a-sphere color="yellow" radius="2" position="0 1 -.5" scale=".2 .2 .2" grabbable stretchable></a-sphere>
             <a-entity position="0 0 0">
                 <a-camera>
                     <a-cursor color="yellow"></a-cursor>
                 </a-camera>
             </a-entity>
-            <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-box"></a-entity>
-            <a-entity id="controller2" hand-controls="right" super-hands sphere-collider="objects: a-box"></a-entity>
+            <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-sphere, a-box"></a-entity>
+            <a-entity id="controller2" hand-controls="right" super-hands sphere-collider="objects: a-sphere, a-box"></a-entity>
         </a-scene>
         <script type="text/javascript">
-            /* Bad way of handling events - use custom components see cursor-scale component example above scene!
+            //Bad way of handling events - use custom components see cursor-scale component example above scene!
             var myBox = document.querySelector("a-box");
-            myBox.addEventListener("mouseenter", function(){
+            myBox.addEventListener("trackpadmoved", function(){
                 myBox.setAttribute("scale", {x: 2.2, y:2.2, z:2.2});
             });
-            myBox.addEventListener("mouseleave", function(){
+            /*myBox.addEventListener("mouseleave", function(){
                 myBox.setAttribute("scale", {x: 2, y:2, z:2});
             }); */
         </script>
