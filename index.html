@@ -128,7 +128,6 @@
                 <audio id="spatialaudio" src="https://ucarecdn.com/53fd1dd9-0813-46ef-b02c-4e9e4638053f/" preload></audio>
             </a-assets>
             <a-box src="#boxTexture" color="red" position="0 2 -5" rotation="0 45 45" scale="2 2 2" cursor-scale>
-                <a-animation attribute="position" to="0 2.2 -5" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
                 <!-- These animations are now added with the cursor-scale custom component I wrote!
                 <a-animation attribute="scale" begin="mouseenter" dur="300" to="2.3 2.3 2.3"></a-animation>
                 <a-animation attribute="scale" begin="mouseleave" dur="300" to="2 2 2"></a-animation>
@@ -174,10 +173,6 @@
                 console.log(e);
                 myBox.setAttribute("scale", {x: 1, y:1, z:1});
             });
-
-            /*myBox.addEventListener("mouseleave", function(){
-                myBox.setAttribute("scale", {x: 2, y:2, z:2});
-            }); */
         </script>
     </body>
 </html>
