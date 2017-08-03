@@ -144,9 +144,10 @@
                 <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="true">
                 <img id="ejbluemat" src="https://ucarecdn.com/e8271956-254d-4bd5-85a4-02ba6d21578b/" crossorigin="true">
                 <!--<audio id="spatialaudio"src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav"></audio>-->
-                <audio id="spatialaudio" src="https://ucarecdn.com/53fd1dd9-0813-46ef-b02c-4e9e4638053f/" preload></audio>
+                <audio id="spatialaudio" src="https://ucarecdn.com/53fd1dd9-0813-46ef-b02c-4e9e4638053f/" preload crossorigin="true"></audio>
                 <a-asset-item id="firstchair" src="https://ucarecdn.com/86a52a70-f451-4e0b-afdc-7dc5915577a9/" crossorigin="true"></a-asset-item>
-                <a-asset-item id="firstchairobj" src="https://ucarecdn.com/66de89a6-8747-4bff-9993-5e2977a79445/" crossorigin="true"></a-asset-item>
+                <a-asset-item id="firstchairobj" src="https://ucarecdn.com/9d5845c1-e5ba-4ca1-878f-0920b1238846/" crossorigin="true"></a-asset-item>
+                <!-- <a-asset-item id="firstchairobj" src="https://ucarecdn.com/66de89a6-8747-4bff-9993-5e2977a79445/" crossorigin="true"></a-asset-item> -->
             </a-assets>
             <a-box src="#boxTexture" color="red" position="0 2 -5" rotation="0 45 45" scale="2 2 2" cursor-scale>
                 <!-- These animations are now added with the cursor-scale custom component I wrote!
@@ -162,17 +163,23 @@
             <a-text value="Click Me!" color="#BBB" position="-0.9 0.2 -3" scale="1.5 1.5 1.5"></a-text>
             <!--<a-box color="blue" rotation="-90 0 0" position="0 1 -.5" scale=".5 .5 .5" grabbable stretchable></a-box>
             <a-sphere color="yellow" radius="2" position="0 1 -.5" scale=".2 .2 .2" grabbable stretchable></a-sphere>-->
-            <a-entity id="many-cube" many-cube position= "0 1 -.5" grabbable stretchable></a-entity>
+
+            <!-- Super hands does not work on custom models. Need to wrap custom models with other components to have them move! -->
+            <a-box position="-.5 .5 .5" alpha="0" grabbable stretchable material="opacity:0">
+                <a-entity obj-model="obj: #firstchairobj;" material="src:#ejbluemat;" scale=".25 .25 .25"></a-entity>
+            </a-box>
+
+            <a-entity id="many-cube" many-cube position= "1 1.5 .5" grabbable stretchable></a-entity>
             <!--<a-collada-model src="#firstchair" position="0 1.5 -3" bluemat></a-collada-model>-->
             <!--<a-obj-model src="#firstchairobj" position="0 1 -3"></a-obj-model>-->
-            <a-entity obj-model="obj: #firstchairobj;" material="src:#ejbluemat;" position="0 1 -1.5"></a-entity>
+
             <a-entity position="0 0 0">
                 <a-camera>
                     <a-cursor color="yellow"></a-cursor>
                 </a-camera>
             </a-entity>
-            <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-sphere, a-box, a-entity"></a-entity>
-            <a-entity id="controller2" hand-controls="right" super-hands sphere-collider="objects: a-sphere, a-box, a-entity"></a-entity>
+            <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-entity, a-box"></a-entity>
+            <a-entity id="controller2" hand-controls="right" super-hands sphere-collider="objects: a-entity, a-box"></a-entity>
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
