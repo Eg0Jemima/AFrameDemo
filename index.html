@@ -182,26 +182,26 @@
             });*/
             var mybone;
             var start = false;
+
             AFRAME.registerComponent('bones', {
                 init: function () {
                     // Do something when component first attached.
                     var source = this.el;
-                    var jsonmodel;
-                    console.log(source);
+                    console.log(source.object3D);
+
                     source.addEventListener("loaded", function(source){
+                        var jsonmodel;
                         jsonmodel = source.target.components["json-model"];
                         console.log(jsonmodel);
                         console.log("loaded call");
-                    });
 
-                    window.addEventListener("keydown", function(e){
-                        if(e.keyCode === 8) {
-                            console.log("backspace pressed");
+                        //Hack - Wait 5 seconds before grabbing model reference due to loading lifecycle issues
+                        window.setTimeout(function(){
+                            start = true;
                             console.log(jsonmodel.model.skeleton.bones[4]);
                             mybone = jsonmodel.model.skeleton.bones[4];
-                            mybone.position.y += 0.01;
-                            start = true;
-                        }
+                            console.log("My Bone = " + mybone);
+                        }, 5000);
                     });
                 },
                 update: function () {
@@ -213,7 +213,7 @@
                 tick: function (time, timeDelta) {
                     // Do something on every scene tick or frame.
                     if(start){
-                        mybone.position.y += 0.001;
+                        //mybone.position.y += 0.001;
                     }
                 }
             });
@@ -276,6 +276,8 @@
             controller1.addEventListener("axismove", function(e){
                 console.log("x = " + e.detail.axis[0]);
                 console.log("y = " + e.detail.axis[1]);
+                mybone.rotation.x += e.detail.axis[0] / 10;
+                mybone.rotation.y += e.detail.axis[1] / 10;
             });
 
             //detect thumbstick press
