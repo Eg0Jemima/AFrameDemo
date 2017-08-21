@@ -163,6 +163,26 @@
 
             });
 
+            AFRAME.registerComponent('get-controller-pos', {
+                schema: {
+                    event: {type: 'string', default: ''},
+                    message: {type: 'string', default: 'Hello, World!'}
+                },
+                init: function () {
+                    // Do something when component first attached.
+                },
+                update: function () {
+                    // Do something when component's data is updated.
+                },
+                remove: function () {
+                    // Do something the component or its entity is detached.
+                },
+                tick: function (time, timeDelta) {
+                    // Do something on every scene tick or frame.
+                    //console.log(this.el.object3D.position);
+                }
+            });
+
             /*AFRAME.registerComponent('bluemat', {
 
                 multiple: true,
@@ -224,6 +244,8 @@
                 <img id="skyTexture" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg" crossorigin="true">
                 <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="true">
                 <img id="ejbluemat" src="https://ucarecdn.com/e8271956-254d-4bd5-85a4-02ba6d21578b/" crossorigin="true">
+                <img id="imagestretch" src="https://ucarecdn.com/0e1a6433-4961-47d9-99ea-d90230bcf3e6/" crossorigin="true">
+                <video id="xvr" autoplay loop="true" src="https://ucarecdn.com/40817a04-ea96-415e-8cf4-cca1b144711f/"></video>
                 <!--<audio id="spatialaudio"src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav"></audio>-->
                 <audio id="spatialaudio" src="https://ucarecdn.com/53fd1dd9-0813-46ef-b02c-4e9e4638053f/" preload crossorigin="true"></audio>
                 <a-asset-item id="firstchair" src="https://ucarecdn.com/86a52a70-f451-4e0b-afdc-7dc5915577a9/" crossorigin="true"></a-asset-item>
@@ -263,18 +285,22 @@
                     <a-cursor color="yellow"></a-cursor>
                 </a-camera>
             </a-entity>
-            <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-entity, a-box"></a-entity>
-            <a-entity id="controller2" hand-controls="right" super-hands sphere-collider="objects: a-entity, a-box"></a-entity>
+            <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-entity, a-box, a-image, a-video, a-curvedimage"></a-entity>
+            <a-entity id="controller2" hand-controls="right" super-hands sphere-collider="objects: a-entity, a-box, a-image, a-video, a-curvedimage"></a-entity>
             <a-entity id="playeravatar" bones json-model="src: #arpitjson;" position="-1.5 .5 .5"></a-entity>
             <a-link href="https://aframe.io/aframe/examples/showcase/link-traversal/city.html" title="Warp to a New World!" image="#skyTexture" position="0 1 2" scale=".5 .5 .5" highlightedColor="#222222"></a-link>
             <!--<a-sphere color="yellow" radius=".25" position="0 1 0"></a-sphere>
             <a-sphere color="green" radius=".25" position="0 2 0"></a-sphere>
             <a-sphere color="red" radius=".25" position="0 3 0"></a-sphere>-->
+            <!--<a-image src="#imagestretch" position="0 1 -0" stretchable grabbable></a-image>-->
+            <!--<a-video src="#xvr" position="0 1 0" stretchable grabbable></a-video>-->
+            <a-curvedimage src="#imagestretch" height="3.0" radius="5.7" theta-length="72" rotation="0 100 0" scale="0.8 0.8 0.8" position="0 1 0" stretchable grabbable></a-curvedimage>
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
             var myBox = document.querySelector('#many-cube');
             var controller1 = document.querySelector("#controller1");
+
 
             //All values come from left hand controller
             //Get axis values from controller1
@@ -289,6 +315,7 @@
             controller1.addEventListener("thumbstickdown", function(e){
                 console.log(e);
                 myBox.setAttribute("scale", {x: 1, y:1, z:1});
+                console.log(controller1.object3D.position);
             });
 
             //detect bottom grip press and scale custom box down
