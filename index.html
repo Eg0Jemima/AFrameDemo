@@ -8,6 +8,13 @@
     </head>
     <body>
         <script type="text/javascript">
+            //Function to set multiple attributes at the same time
+            function setAttributes(el, attrs) {
+              for(var key in attrs) {
+                el.setAttribute(key, attrs[key]);
+              }
+            }
+
             AFRAME.registerComponent('cursor-scale', {
                 schema: {
                     to: {default: '2.5 2.5 2.5'}
@@ -237,6 +244,42 @@
                     }
                 }
             });
+            AFRAME.registerComponent('curvedvideo', {
+                init: function () {
+                    // Do something when component first attached.
+                    var front = document.createElement("a-curvedimage");
+                    var back = document.createElement("a-curvedimage");
+
+                    setAttributes(front, {
+                        "src": "#xvr",
+                        "height": "3.0",
+                        "theta-start": "144",
+                        "theta-length": 100,
+                        "rotation": "0 0 0",
+                        "material": "side:single; repeat:1 1",
+                        "scale": "-2 0.8 0.8",
+                        "position": "0 1 0",
+                        "stretchable": "",
+                        "grabbable": ""
+                    });
+
+                    setAttributes(back, {
+                        "src": "#paris",
+                        "height": "3.0",
+                        "theta-start": "144",
+                        "theta-length": 100,
+                        "rotation": "0 0 0",
+                        "material": "side:back; repeat:1 1",
+                        "scale": "-2 0.8 0.8",
+                        "position": "0 1 0",
+                        "stretchable": "",
+                        "grabbable": ""
+                    });
+
+                    this.el.appendChild(front);
+                    this.el.appendChild(back);
+                }
+            });
         </script>
         <a-scene avatar-recorder>
             <a-assets>
@@ -246,7 +289,7 @@
                 <img id="ejbluemat" src="https://ucarecdn.com/e8271956-254d-4bd5-85a4-02ba6d21578b/" crossorigin="true">
                 <img id="imagestretch" src="https://ucarecdn.com/0e1a6433-4961-47d9-99ea-d90230bcf3e6/" crossorigin="true">
                 <video id="xvr" autoplay loop="true" src="https://ucarecdn.com/40817a04-ea96-415e-8cf4-cca1b144711f/" crossorigin="true"></video>
-                <!--<video id="paris" autoplay loop="true" src="https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/" crossorigin="true"></video>-->
+                <video id="paris" autoplay loop="true" src="https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/" crossorigin="true"></video>
                 <!--<video id="xvr" autoplay loop="true" src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/" crossorigin="true"></video>-->
                 <!--<video id="xvr" autoplay loop="true" src="https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/" crossorigin="true"></video>-->
                 <!--<audio id="spatialaudio"src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav"></audio>-->
@@ -297,14 +340,13 @@
             <a-sphere color="green" radius=".25" position="0 2 0"></a-sphere>
             <a-sphere color="red" radius=".25" position="0 3 0"></a-sphere>-->
             <!--<a-image src="#imagestretch" position="0 1 -0" stretchable grabbable></a-image>-->
-            <a-curvedimage id="curvedvid" src="#xvr" height="3.0" radius="5.7" theta-length="72" rotation="0 150 0" scale="-1 0.8 0.8" position="0 1 0" stretchable grabbable></a-curvedimage>
+            <a-entity curvedvideo></a-entity>
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
             var myBox = document.querySelector('#many-cube');
             var controller1 = document.querySelector("#controller1");
             var scene = document.querySelector("a-scene");
-            var video = document.querySelector("#curvedvid");
 
             document.querySelector('a-scene').addEventListener('loaded', function () {
                 //All values come from left hand controller
@@ -336,14 +378,16 @@
                 ];
 
                 //loop through 2D array to print menu as grid
-                list.forEach(function(item, index, array){
-                    item.forEach(function(item){
+                list.forEach(function(item, row, array){
+                    item.forEach(function(item, col){
+                        var count = col + 1;
+                        var rowIncrement = row * 2;
                         var text = document.createElement("a-text");
                         setAttributes(text, {
-                            "value": "Menu Item " + item,
+                            "value": "Menu Item " + (row + count + rowIncrement),
                             "stretchable": "",
                             "grabbable": "",
-                            "position": {x:item - (3 * (index + 1)), y:1 + index, z:-.5},
+                            "position": {x:(row + count + rowIncrement) +  - (3 * (row + 1)), y:1 + row, z:-.5},
                             "geometry": "primitive:plane",
                             "width": "auto",
                             "height": "auto",
@@ -353,17 +397,6 @@
                         scene.appendChild(text);
                     });
                 });
-
-                function setAttributes(el, attrs) {
-                  for(var key in attrs) {
-                    el.setAttribute(key, attrs[key]);
-                  }
-                }
-
-                console.log("My Video Print -- ");
-                var vidMap = video.components.material.material.map;
-                vidMap.repeat = {x:1, y:1};
-                console.log(video.components.material.material);
             })
         </script>
     </body>
