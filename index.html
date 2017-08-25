@@ -269,8 +269,8 @@
                         "theta-start": "144",
                         "theta-length": 100,
                         "rotation": "0 0 0",
-                        "material": "side:back; repeat:1 1",
-                        "scale": "-2 0.8 0.8",
+                        "material": "side:single; repeat:1 1",
+                        "scale": "2 0.8 0.8",
                         "position": "0 1 0",
                         "stretchable": "",
                         "grabbable": ""
@@ -278,6 +278,39 @@
 
                     this.el.appendChild(front);
                     this.el.appendChild(back);
+                }
+            });
+            AFRAME.registerComponent('gridmenu', {
+                init: function () {
+                    // Do something when component first attached.
+                    var element = this.el;
+                    var list = [
+                        ["Pepper", 2, 3],
+                        [4, "Marinara", 6],
+                        [7, 8, "Onion"],
+                    ];
+
+                    //loop through 2D array to print menu as grid
+                    list.forEach(function(item, row, array){
+                        item.forEach(function(item, col){
+                            var count = col + 1;
+                            var rowIncrement = row * 2;
+                            var text = document.createElement("a-text");
+                            setAttributes(text, {
+                                "value": "Menu Item " + item,
+                                "stretchable": "",
+                                "grabbable": "",
+                                "position": {x:((row + 1) + count + rowIncrement) - (3 * (row + 1)), y:(1 + row), z:-0.5},
+                                "geometry": "primitive:plane",
+                                "width": "auto",
+                                "height": "auto",
+                                "align": "center",
+                                //"src":"#paris"
+                                "wrapCount": 5
+                            });
+                            element.appendChild(text);
+                        });
+                    });
                 }
             });
         </script>
@@ -341,6 +374,7 @@
             <a-sphere color="red" radius=".25" position="0 3 0"></a-sphere>-->
             <!--<a-image src="#imagestretch" position="0 1 -0" stretchable grabbable></a-image>-->
             <a-entity curvedvideo></a-entity>
+            <a-entity gridmenu></a-entity>
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
@@ -369,33 +403,6 @@
                 controller1.addEventListener("gripdown", function(e){
                     console.log(e);
                     myBox.setAttribute("scale", {x:1, y:1, z:1});
-                });
-
-                var list = [
-                    [1, 2, 3],
-                    [4, 5, 6],
-                    [7, 8, 9],
-                ];
-
-                //loop through 2D array to print menu as grid
-                list.forEach(function(item, row, array){
-                    item.forEach(function(item, col){
-                        var count = col + 1;
-                        var rowIncrement = row * 2;
-                        var text = document.createElement("a-text");
-                        setAttributes(text, {
-                            "value": "Menu Item " + (row + count + rowIncrement),
-                            "stretchable": "",
-                            "grabbable": "",
-                            "position": {x:(row + count + rowIncrement) +  - (3 * (row + 1)), y:1 + row, z:-.5},
-                            "geometry": "primitive:plane",
-                            "width": "auto",
-                            "height": "auto",
-                            "align": "center",
-                            "wrapCount": 5
-                        });
-                        scene.appendChild(text);
-                    });
                 });
             })
         </script>
