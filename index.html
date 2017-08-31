@@ -251,7 +251,8 @@
                     var back = document.createElement("a-curvedimage");
 
                     setAttributes(front, {
-                        "src": "#xvr",
+                        //"src": "#xvr",
+                        "src": "https://ucarecdn.com/40817a04-ea96-415e-8cf4-cca1b144711f/",
                         "height": "3.0",
                         "theta-start": "144",
                         "theta-length": 100,
@@ -264,7 +265,8 @@
                     });
 
                     setAttributes(back, {
-                        "src": "#paris",
+                        "src": "https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/",
+                        //"src": "#paris",
                         "height": "3.0",
                         "theta-start": "144",
                         "theta-length": 100,
@@ -288,6 +290,7 @@
                 init: function () {
                     // Do something when component first attached.
                     var element = this.el;
+                    var videoPlaying = false;
                     var layout = this.data.layout;
                     var list = [ //list can now be any form! Array, list, json array, etc.
                         [1, 2, 3],
@@ -319,11 +322,11 @@
                     function setLayout(){
                         switch (layout) {
                             default:
-                                //Default to 'bestfit', only works for square amounts 2x2, 3x3, etc.
+                                //Default to 'bestfit'
                                 var children = element.components.gridmenu.el.children;
                                 var listLength = children.length;
                                 var width = Math.round(Math.sqrt(listLength)); //x is not growing so will always be shorter
-                                var ywidth = Math.ceil(listLength / width); //handles cases where the factors are not perfect example 17
+                                var ywidth = Math.ceil(listLength / width); //handles cases where the factors are not perfect example 30
                                 console.log(width);
 
                                 var xoff = width / 2 + .5; //starting point is an offset of half the width of the grid + .5 for center multiplied by -1
@@ -334,12 +337,19 @@
                                     var x = i % width + 1; //adding one makes it go from 1 - 4 instead of 0 to 1 to avoid 0 division
                                     var y = Math.floor(i / width) + 1; //adding one makes it go from 1 - 4 instead of 0 to 1 to avoid 0 division
                                     console.log(x + ", " + y);
-                                    child.setAttribute("position", {x:x - xoff, y:y - yoff, z:0});
+                                    child.setAttribute("position", {x:(x - xoff), y:(y - yoff), z:0});
                                     console.log(child.components.position);
                                 }
                                 break;
                         }
                     }
+
+                  element.addEventListener("click", function(){
+                      if(!videoPlaying){
+                        element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="curvedvideo" curvedvideo position="0 0 -3" scale=".75 .75 .75"></a-entity>');
+                        videoPlaying = true;
+                      }
+                  });
                 }
             });
         </script>
@@ -350,33 +360,33 @@
                 <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="true">
                 <img id="ejbluemat" src="https://ucarecdn.com/e8271956-254d-4bd5-85a4-02ba6d21578b/" crossorigin="true">
                 <img id="imagestretch" src="https://ucarecdn.com/0e1a6433-4961-47d9-99ea-d90230bcf3e6/" crossorigin="true">
-                <video id="xvr" autoplay loop="true" src="https://ucarecdn.com/40817a04-ea96-415e-8cf4-cca1b144711f/" crossorigin="true"></video>
-                <video id="paris" autoplay loop="true" src="https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/" crossorigin="true"></video>
+                <!--<video id="xvr" autoplay loop="true" src="https://ucarecdn.com/40817a04-ea96-415e-8cf4-cca1b144711f/" crossorigin="true"></video>
+                <video id="paris" autoplay loop="true" src="https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/" crossorigin="true"></video>-->
                 <!--<video id="xvr" autoplay loop="true" src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/" crossorigin="true"></video>-->
                 <!--<video id="xvr" autoplay loop="true" src="https://ucarecdn.com/4130c599-445f-4e76-9052-49978e972641/" crossorigin="true"></video>-->
                 <!--<audio id="spatialaudio"src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav"></audio>-->
                 <audio id="spatialaudio" src="https://ucarecdn.com/53fd1dd9-0813-46ef-b02c-4e9e4638053f/" preload crossorigin="true"></audio>
-                <a-asset-item id="firstchair" src="https://ucarecdn.com/86a52a70-f451-4e0b-afdc-7dc5915577a9/" crossorigin="true"></a-asset-item>
-                <!--<a-asset-item id="firstchairobj" src="https://ucarecdn.com/9d5845c1-e5ba-4ca1-878f-0920b1238846/" crossorigin="true"></a-asset-item>
-                <a-asset-item id="arpitavatar" src="https://ucarecdn.com/e980bad3-2dc4-4ad0-81fc-73726c5e3b5a/" crossorigin="true"></a-asset-item>
+                <!--<a-asset-item id="firstchair" src="https://ucarecdn.com/86a52a70-f451-4e0b-afdc-7dc5915577a9/" crossorigin="true"></a-asset-item>-->
+                <a-asset-item id="firstchairobj" src="https://ucarecdn.com/9d5845c1-e5ba-4ca1-878f-0920b1238846/" crossorigin="true"></a-asset-item>
+                <!--<a-asset-item id="arpitavatar" src="https://ucarecdn.com/e980bad3-2dc4-4ad0-81fc-73726c5e3b5a/" crossorigin="true"></a-asset-item>
                 <a-asset-item id="arpitcollada" src="https://ucarecdn.com/8265dce7-cb66-4804-a59f-fbf5b84fb0d3/" crossorigin="true"></a-asset-item>-->
                 <a-asset-item id="arpitjson" src="https://ucarecdn.com/765fd642-61ed-4bac-a13a-dc1b21429b67/" crossorigin="true"></a-asset-item>
                 <!-- Old Blue Model <a-asset-item id="arpitjson" src="https://ucarecdn.com/b229522f-bde3-49d4-bd0f-5b6313bb593f/" crossorigin="true"></a-asset-item> -->
                 <!-- <a-asset-item id="firstchairobj" src="https://ucarecdn.com/66de89a6-8747-4bff-9993-5e2977a79445/" crossorigin="true"></a-asset-item> -->
 
             </a-assets>
-            <a-box src="#boxTexture" color="red" position="0 2 -5" rotation="0 45 45" scale="2 2 2" cursor-scale>
+            <a-box src="#boxTexture" color="red" position="5 2 -4" rotation="0 45 45" scale="2 2 2" cursor-scale>
                 <!-- These animations are now added with the cursor-scale custom component I wrote!
                 <a-animation attribute="scale" begin="mouseenter" dur="300" to="2.3 2.3 2.3"></a-animation>
                 <a-animation attribute="scale" begin="mouseleave" dur="300" to="2 2 2"></a-animation>
                 <a-animation attribute="rotation" begin="click" dur="2000" to="360 405 45"></a-animation> -->
             </a-box>
             <a-sky src="#skyTexture"></a-sky>
-            <a-plane src="#groundTexture" height="1" width="1" rotation="-90 0 0" repeat="10 10"></a-plane>
+            <a-plane src="#groundTexture" height="30" width="30" rotation="-90 0 0" repeat="10 10"></a-plane>
             <a-light type="ambient" color="#445451"></a-light>
             <a-light type="point" intensity="2" position="2 4 4"></a-light>
             <a-sound src="#spatialaudio" autoplay="true" position="0 0 0"></a-sound>
-            <a-text value="Click Me!" color="#BBB" position="-0.9 0.2 -3" scale="1.5 1.5 1.5"></a-text>
+            <a-text value="Click Me!" color="#BBB" position="4 0.2 -4" scale="1.5 1.5 1.5" rotation="0 -40 0"></a-text>
 
             <!-- Super hands does not work on custom models. Need to wrap custom models with other components to have them move! -->
             <a-box position="-1.5 .25 .5" rotation="0 -90 0" alpha="0" grabbable stretchable material="opacity:0">
@@ -402,8 +412,9 @@
             <a-sphere color="green" radius=".25" position="0 2 0"></a-sphere>
             <a-sphere color="red" radius=".25" position="0 3 0"></a-sphere>-->
             <!--<a-image src="#imagestretch" position="0 1 -0" stretchable grabbable></a-image>-->
-            <a-entity curvedvideo></a-entity>
-            <a-entity gridmenu></a-entity>
+            <!--<a-entity curvedvideo position="-1 0 -3" rotation="0 2.5 0"></a-entity>-->
+            <a-entity gridmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>
+            <a-text value="Click Me!" color="#BBB" position="-3 .75 .5" rotation="0 90 0"></a-text>
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
