@@ -313,6 +313,10 @@
                                 "align": "center",
                                 "wrapCount": 5
                             });
+                            text.addEventListener("click", function(){
+                                //console.log("You just clicked " + item.name);
+                                console.log(item);
+                            });
                             element.appendChild(text);
                         });
                     });
@@ -344,12 +348,12 @@
                         }
                     }
 
-                  element.addEventListener("click", function(){
+                  /*element.addEventListener("click", function(){
                       if(!videoPlaying){
                         element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="curvedvideo" curvedvideo position="0 0 -3" scale=".75 .75 .75"></a-entity>');
                         videoPlaying = true;
                       }
-                  });
+                  });*/
                 }
             });
         </script>
