@@ -1,6 +1,7 @@
 <html>
     <head>
         <script src="https://rawgit.com/aframevr/aframe/0cceca4/dist/aframe-master.min.js"></script>
+        <!--<script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>-->
         <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
         <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.9.0/dist/aframe-extras.min.js"></script>
         <script src="https://unpkg.com/super-hands@1.0.1/dist/super-hands.min.js"></script>
@@ -282,6 +283,7 @@
                     this.el.appendChild(back);
                 }
             });
+
             AFRAME.registerComponent('gridmenu', {
                 schema: {
                     layout: {type: 'string', default: 'bestfit'},
@@ -293,9 +295,7 @@
                     var videoPlaying = false;
                     var layout = this.data.layout;
                     var list = [ //list can now be any form! Array, list, json array, etc.
-                        [1, 2, 3],
-                        [4, 5, 6],
-                        [7, 8, "Onion"]
+                        ["Return to Lobby", "Change Ownership", "Place Objects","Mute Self"],
                     ];
                     console.log("The layout of this grid = " + layout);
 
@@ -304,19 +304,21 @@
                         item.forEach(function(item){
                             var text = document.createElement("a-text");
                             setAttributes(text, {
-                                "value": "Menu Item " + item,
+                                "value": item,
                                 "stretchable": "",
                                 "grabbable": "",
                                 "geometry": "primitive:plane",
-                                "width": "auto",
-                                "height": "auto",
+                                "width": "2",
+                                "height": "2",
                                 "align": "center",
                                 "wrapCount": 5
                             });
-                            text.addEventListener("click", function(){
-                                //console.log("You just clicked " + item.name);
-                                console.log(item);
-                            });
+                            /*text.addEventListener("click", function(){
+                                if(item === "Change Ownership"){
+                                    element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="objectmenu" objectmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>');
+                                    element.sceneEl.removeChild(element);
+                                }
+                            });*/
                             element.appendChild(text);
                         });
                     });
@@ -356,6 +358,129 @@
                   });*/
                 }
             });
+            AFRAME.registerComponent('objectmenu', {
+                schema: {
+                    layout: {type: 'string', default: 'bestfit'},
+                    selected: {type: 'string', default: ''}
+                },
+
+                init: function () {
+                    // Do something when component first attached.
+                    var element = this.el;
+                    var videoPlaying = false;
+                    var layout = this.data.layout;
+                    var selected = this.data.selected;
+                    var topofmenu = 0;
+                    var gridmenu = document.querySelector("#gridmenu");
+                    var list = [ //list can now be any form! Array, list, json array, etc.
+                        ["Change Source", "Change Color", "Move Object","Video Controls"]
+                    ];
+
+                    console.log("selected = " + selected);
+                    console.log("The layout of this grid = " + layout);
+
+                    //loop through 2D array to print menu as grid
+                    list.forEach(function(item, array){
+                        item.forEach(function(item){
+                            var text = document.createElement("a-text");
+                            setAttributes(text, {
+                                "value": item,
+                                "geometry": "primitive:plane",
+                                "width": "2",
+                                "height": "2",
+                                "align": "center",
+                                "wrapCount": 100
+                            });
+                            text.addEventListener("click", function(){
+                                console.log("You just clicked " + item);
+                            });
+                            element.appendChild(text);
+                        });
+                    });
+                    //Shared Element
+                    var sharedEl = document.querySelector(selected);
+                    var shared = sharedEl.cloneNode("true");
+
+                    //Back Button
+                    var back = document.createElement("a-text");
+                    setAttributes(back, {
+                        "value": "Main Menu",
+                        "geometry": "primitive:plane",
+                        "width": "2",
+                        "height": "2",
+                        "align": "center",
+                        "wrapCount": 5
+                    });
+                    back.addEventListener("click", function(){
+                          element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="gridmenu" gridmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>');
+                          element.sceneEl.removeChild(element);
+                    });
+
+                    //Dismiss Button
+                    var dismiss = document.createElement("a-text");
+                    setAttributes(dismiss, {
+                        "value": "Dismiss",
+                        "geometry": "primitive:plane",
+                        "width": "2",
+                        "height": "2",
+                        "align": "center",
+                        "wrapCount": 5
+                    });
+                    dismiss.addEventListener("click", function(){
+                        element.sceneEl.removeChild(element);
+                    });
+
+                    setLayout();
+
+                    shared.setAttribute("position", {x:0, y:topofmenu, z:0});
+                    back.setAttribute("position", {x:-1, y:topofmenu, z:0});
+                    dismiss.setAttribute("position", {x:1, y:topofmenu, z:0});
+                    element.appendChild(shared);
+                    element.appendChild(back);
+                    element.appendChild(dismiss);
+
+                    function setLayout(){
+                        switch (layout) {
+                            default:
+                                //Default to 'bestfit'
+                                var children = element.components.objectmenu.el.children;
+                                var listLength = children.length;
+                                var width = Math.round(Math.sqrt(listLength)); //x is not growing so will always be shorter
+                                var ywidth = Math.ceil(listLength / width); //handles cases where the factors are not perfect example 30
+                                topofmenu = ywidth;
+                                console.log(width);
+
+                                var xoff = width / 2 + .5; //starting point is an offset of half the width of the grid + .5 for center multiplied by -1
+                                var yoff = ywidth / 2 + .5;
+
+                                for(i = 0; i < listLength; i++){
+                                    var child = children[i];
+                                    var x = i % width + 1; //adding one makes it go from 1 - 4 instead of 0 to 1 to avoid 0 division
+                                    var y = Math.floor(i / width) + 1; //adding one makes it go from 1 - 4 instead of 0 to 1 to avoid 0 division
+                                    console.log(x + ", " + y);
+                                    child.setAttribute("position", {x:(x - xoff), y:(y - yoff), z:0});
+                                    console.log(child.components.position);
+                                }
+                                break;
+                        }
+                    }
+                }
+            });
+
+            AFRAME.registerComponent('menuable', {
+                init: function () {
+                    // Do something when component first attached.
+                    var element = this.el;
+                    element.addEventListener("click", function(){
+                        //Throw up object menu if it is not already up & the item has an id
+                        if(!document.querySelector("#objectmenu") && element.getAttribute("id")){
+                            var menuhtml = '<a-entity id="objectmenu" objectmenu="selected: #' + element.getAttribute("id") + '" position="-3 2.5 0" rotation="0 90 0"></a-entity>';
+                            element.sceneEl.insertAdjacentHTML('beforeend', menuhtml);
+                            console.log(menuhtml);
+                        }
+                    });
+                }
+            });
         </script>
         <a-scene avatar-recorder>
             <a-assets>
@@ -379,7 +504,7 @@
                 <!-- <a-asset-item id="firstchairobj" src="https://ucarecdn.com/66de89a6-8747-4bff-9993-5e2977a79445/" crossorigin="true"></a-asset-item> -->
 
             </a-assets>
-            <a-box src="#boxTexture" color="red" position="5 2 -4" rotation="0 45 45" scale="2 2 2" cursor-scale>
+            <a-box src="#boxTexture" color="red" position="5 2 -4" rotation="0 45 45" scale="2 2 2" cursor-scale menuable>
                 <!-- These animations are now added with the cursor-scale custom component I wrote!
                 <a-animation attribute="scale" begin="mouseenter" dur="300" to="2.3 2.3 2.3"></a-animation>
                 <a-animation attribute="scale" begin="mouseleave" dur="300" to="2 2 2"></a-animation>
@@ -393,13 +518,13 @@
             <a-text value="Click Me!" color="#BBB" position="4 0.2 -4" scale="1.5 1.5 1.5" rotation="0 -40 0"></a-text>
 
             <!-- Super hands does not work on custom models. Need to wrap custom models with other components to have them move! -->
-            <a-box position="-1.5 .25 .5" rotation="0 -90 0" alpha="0" grabbable stretchable material="opacity:0">
+            <a-box id="bluechair" position="-1.5 .25 .5" rotation="0 -90 0" alpha="0" material="opacity:0" grabbable stretchable menuable>
                 <a-entity obj-model="obj: #firstchairobj;" material="src:#ejbluemat;" scale=".25 .25 .25"></a-entity>
             </a-box>
             <!--<a-box color="blue" rotation="-90 0 0" position="0 1 -.5" scale=".5 .5 .5" grabbable stretchable></a-box>
             <a-sphere color="yellow" radius="2" position="0 1 -.5" scale=".2 .2 .2" grabbable stretchable></a-sphere>-->
 
-            <a-entity id="many-cube" many-cube position= "1 1.5 .5" grabbable stretchable></a-entity>
+            <a-entity id="many-cube" many-cube position= "1 1.5 .5" grabbable stretchable menuable></a-entity>
             <!--<a-collada-model src="#firstchair" position="0 1.5 -3" bluemat></a-collada-model>-->
             <!--<a-obj-model src="#firstchairobj" position="0 1 -3"></a-obj-model>-->
 
@@ -417,7 +542,7 @@
             <a-sphere color="red" radius=".25" position="0 3 0"></a-sphere>-->
             <!--<a-image src="#imagestretch" position="0 1 -0" stretchable grabbable></a-image>-->
             <!--<a-entity curvedvideo position="-1 0 -3" rotation="0 2.5 0"></a-entity>-->
-            <a-entity gridmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>
+            <!--<a-entity id="gridmenu" gridmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>-->
             <a-text value="Click Me!" color="#BBB" position="-3 .75 .5" rotation="0 90 0"></a-text>
         </a-scene>
         <script type="text/javascript">
