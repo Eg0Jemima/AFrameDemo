@@ -366,6 +366,10 @@
                     var selected = this.data.selected;
                     var topofmenu = 0;
                     var gridmenu = document.querySelector("#gridmenu");
+                    var camera = element.sceneEl.querySelector("a-camera");
+                    var cameraPosition = camera.getAttribute("position");
+                    var cameraRotation = camera.getAttribute("rotation");
+                    var parent = element.sceneEl.querySelector("#obmenuwrap");
                     var list = [ //list can now be any form! Array, list, json array, etc.
                         ["Change Source", "Change Color", "Move Object","Video Controls"]
                     ];
@@ -413,7 +417,7 @@
                     });
                     back.addEventListener("click", function(){
                           element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="gridmenu" gridmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>');
-                          element.sceneEl.removeChild(element);
+                          element.sceneEl.removeChild(parent);
                     });
 
                     //Dismiss Button
@@ -427,7 +431,7 @@
                         "wrapCount": 5
                     });
                     dismiss.addEventListener("click", function(){
-                        element.sceneEl.removeChild(element);
+                        element.sceneEl.removeChild(parent);
                     });
 
                     setLayout();
@@ -440,6 +444,15 @@
                     element.appendChild(dismiss);
 
                     function setLayout(){
+                        //position the grid to be in front of the cameraPosition
+                        console.log("Camera Position = ");
+                        console.log(cameraPosition);
+                        console.log("Camera Rotation = ");
+                        console.log(cameraRotation);
+                        parent.setAttribute("position", {x:cameraPosition.x, y:cameraPosition.y, z:cameraPosition.z});
+                        parent.setAttribute("rotation", cameraRotation);
+                        element.setAttribute("position", {x:0, y:0, z:-4}); //need wrapper parent to push this forward locally
+
                         switch (layout) {
                             default:
                                 //Default to 'bestfit'
@@ -474,9 +487,8 @@
                     element.addEventListener("click", function(){
                         //Throw up object menu if it is not already up & the item has an id
                         if(!document.querySelector("#objectmenu") && element.getAttribute("id")){
-                            var menuhtml = '<a-entity id="objectmenu" objectmenu="selected: #' + element.getAttribute("id") + '" position="-3 2.5 0" rotation="0 90 0"></a-entity>';
+                            var menuhtml = '<a-entity id="obmenuwrap"><a-entity id="objectmenu" objectmenu="selected: #' + element.getAttribute("id") + '"></a-entity></a-entity>';
                             element.sceneEl.insertAdjacentHTML('beforeend', menuhtml);
-                            console.log(menuhtml);
                         }
                     });
                 }
@@ -524,9 +536,9 @@
 
             <a-entity id="many-cube" many-cube position= "1 1.5 .5" grabbable stretchable menuable></a-entity>
 
-            <a-entity position="0 0 0">
+            <a-entity id="maincamera" position="0 0 0">
                 <a-camera>
-                    <a-cursor color="yellow"></a-cursor>
+                    <a-cursor id="maincursor" color="yellow"></a-cursor>
                 </a-camera>
             </a-entity>
             <a-entity id="controller1" hand-controls="left" super-hands sphere-collider="objects: a-entity, a-box, a-image, a-video, a-curvedimage, a-text"></a-entity>
