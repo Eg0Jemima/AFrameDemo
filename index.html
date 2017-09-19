@@ -1,8 +1,8 @@
 <html>
     <head>
-        <script src="https://rawgit.com/aframevr/aframe/0cceca4/dist/aframe-master.min.js"></script>
-        <!--<script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>-->
-        <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
+        <!--<script src="https://rawgit.com/aframevr/aframe/0cceca4/dist/aframe-master.min.js"></script>-->
+        <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+        <!--<script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>-->
         <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.9.0/dist/aframe-extras.min.js"></script>
         <script src="https://unpkg.com/super-hands@1.0.1/dist/super-hands.min.js"></script>
         <script src="https://unpkg.com/aframe-cubemap-component@0.1.2/dist/aframe-cubemap-component.min.js"></script>
@@ -245,6 +245,7 @@
                     }
                 }
             });
+
             AFRAME.registerComponent('curvedvideo', {
                 init: function () {
                     // Do something when component first attached.
@@ -374,9 +375,6 @@
                         ["Change Source", "Change Color", "Move Object","Video Controls"]
                     ];
 
-                    console.log("selected = " + selected);
-                    console.log("The layout of this grid = " + layout);
-
                     //loop through 2D array to print menu as grid
                     list.forEach(function(item, array){
                         item.forEach(function(item){
@@ -437,21 +435,41 @@
                     setLayout();
 
                     shared.setAttribute("position", {x:0, y:topofmenu, z:0});
+                    shared.setAttribute("rotation", "0 0 0");
+                    shared.setAttribute("scale", "1 1 1");
+                    shared.insertAdjacentHTML('beforeend','<a-animation attribute="rotation" dur="10000" fill="forwards" to="0 360 0" repeat="indefinite"></a-animation>');
                     back.setAttribute("position", {x:-1, y:topofmenu, z:0});
                     dismiss.setAttribute("position", {x:1, y:topofmenu, z:0});
                     element.appendChild(shared);
                     element.appendChild(back);
                     element.appendChild(dismiss);
+                    element.insertAdjacentHTML('beforeend','<a-animation attribute="scale" begin="0" from="0 0 0" to=".5 .5 .5"></a-animation>');
 
                     function setLayout(){
-                        //position the grid to be in front of the cameraPosition
-                        console.log("Camera Position = ");
-                        console.log(cameraPosition);
-                        console.log("Camera Rotation = ");
-                        console.log(cameraRotation);
+                        //Set parent object position to users camera for relative adjustments
                         parent.setAttribute("position", {x:cameraPosition.x, y:cameraPosition.y, z:cameraPosition.z});
-                        parent.setAttribute("rotation", cameraRotation);
-                        element.setAttribute("position", {x:0, y:0, z:-4}); //need wrapper parent to push this forward locally
+                        parent.setAttribute("rotation", {x:cameraRotation.x, y:cameraRotation.y, z:cameraRotation.z});
+
+                        //Handle Offset Animations for menu
+                        var animPos = document.createElement("a-animation");
+                        var offsetX = cameraPosition.x + .25;
+                        var moveTo = offsetX + " " + cameraPosition.y + " " + cameraPosition.z;
+                        var moveFrom = cameraPosition.x + " " + cameraPosition.y + " " + cameraPosition.z;
+                        animPos.setAttribute("to", moveTo);
+                        animPos.setAttribute("from", moveFrom);
+                        animPos.setAttribute("attribute", "position");
+                        parent.appendChild(animPos);
+                        var animRot = document.createElement("a-animation");
+                        var offsetY = cameraRotation.y - 15;
+                        var rotTo = cameraRotation.x + " " + offsetY + " " + cameraRotation.z;
+                        var rotFrom = cameraRotation.x + " " + cameraRotation.y + " " + cameraRotation.z;
+                        animRot.setAttribute("to", rotTo);
+                        animRot.setAttribute("from", rotFrom);
+                        animRot.setAttribute("attribute", "rotation");
+                        parent.appendChild(animRot);
+
+                        //Push menu in front of user by 2
+                        element.setAttribute("position", {x:0, y:0, z:-2}); //need wrapper parent to push this forward locally
 
                         switch (layout) {
                             default:
@@ -479,6 +497,7 @@
                     }
                 }
             });
+            //TODO make functions for layout and generating grid assets from list to be used in multiple components
 
             AFRAME.registerComponent('menuable', {
                 init: function () {
@@ -514,9 +533,8 @@
                 <a-asset-item id="arpitjson" src="https://ucarecdn.com/765fd642-61ed-4bac-a13a-dc1b21429b67/" crossorigin="true"></a-asset-item>
                 <!-- Old Blue Model <a-asset-item id="arpitjson" src="https://ucarecdn.com/b229522f-bde3-49d4-bd0f-5b6313bb593f/" crossorigin="true"></a-asset-item> -->
                 <!-- <a-asset-item id="firstchairobj" src="https://ucarecdn.com/66de89a6-8747-4bff-9993-5e2977a79445/" crossorigin="true"></a-asset-item> -->
-
             </a-assets>
-            <a-box src="#boxTexture" color="red" position="5 2 -4" rotation="0 45 45" scale="2 2 2" cursor-scale menuable>
+            <a-box id="redbox" src="#boxTexture" color="red" position="5 2 -4" rotation="0 45 45" scale="2 2 2" cursor-scale menuable>
                 <!-- These animations are now added with the cursor-scale custom component I wrote!
                 <a-animation attribute="scale" begin="mouseenter" dur="300" to="2.3 2.3 2.3"></a-animation>
                 <a-animation attribute="scale" begin="mouseleave" dur="300" to="2 2 2"></a-animation>
