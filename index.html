@@ -1,8 +1,11 @@
 <html>
     <head>
         <!--<script src="https://rawgit.com/aframevr/aframe/0cceca4/dist/aframe-master.min.js"></script>-->
-        <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
-        <!--<script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>-->
+        <!-- <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script> -->
+        <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+        <!--<script src="https://rawgit.com/chenzlabs/aframe/master/dist/aframe-master.min.js"></script>-->
+        <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
+        <!--<script src="https://cdn.rawgit.com/dmarcos/aframe-motion-capture-components/tree/db81dbdbb773718a198214e3e3673268d5e985f0"></script>-->
         <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.9.0/dist/aframe-extras.min.js"></script>
         <script src="https://unpkg.com/super-hands@1.0.1/dist/super-hands.min.js"></script>
         <script src="https://unpkg.com/aframe-cubemap-component@0.1.2/dist/aframe-cubemap-component.min.js"></script>
@@ -295,33 +298,29 @@
                     var element = this.el;
                     var videoPlaying = false;
                     var layout = this.data.layout;
-                    var list = [ //list can now be any form! Array, list, json array, etc.
-                        ["Return to Lobby", "Change Ownership", "Place Objects","Mute Self"],
-                    ];
+                    var list = ["Return to Lobby", "Change Ownership", "Place Objects","Mute Self"];
                     console.log("The layout of this grid = " + layout);
 
                     //loop through 2D array to print menu as grid
                     list.forEach(function(item, array){
-                        item.forEach(function(item){
-                            var text = document.createElement("a-text");
-                            setAttributes(text, {
-                                "value": item,
-                                "stretchable": "",
-                                "grabbable": "",
-                                "geometry": "primitive:plane",
-                                "width": "2",
-                                "height": "2",
-                                "align": "center",
-                                "wrapCount": 5
-                            });
-                            /*text.addEventListener("click", function(){
-                                if(item === "Change Ownership"){
-                                    element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="objectmenu" objectmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>');
-                                    element.sceneEl.removeChild(element);
-                                }
-                            });*/
-                            element.appendChild(text);
+                        var text = document.createElement("a-text");
+                        setAttributes(text, {
+                            "value": item,
+                            "stretchable": "",
+                            "grabbable": "",
+                            "geometry": "primitive:plane",
+                            "width": "2",
+                            "height": "2",
+                            "align": "center",
+                            "wrapCount": 5
                         });
+                        /*text.addEventListener("click", function(){
+                            if(item === "Change Ownership"){
+                                element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="objectmenu" objectmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>');
+                                element.sceneEl.removeChild(element);
+                            }
+                        });*/
+                        element.appendChild(text);
                     });
 
                     setLayout();
@@ -366,38 +365,33 @@
                     var layout = this.data.layout;
                     var selected = this.data.selected;
                     var topofmenu = 0;
-                    var gridmenu = document.querySelector("#gridmenu");
                     var camera = element.sceneEl.querySelector("a-camera");
                     var cameraPosition = camera.getAttribute("position");
                     var cameraRotation = camera.getAttribute("rotation");
                     var parent = element.sceneEl.querySelector("#obmenuwrap");
-                    var list = [ //list can now be any form! Array, list, json array, etc.
-                        ["Change Source", "Change Color", "Move Object","Video Controls"]
-                    ];
+                    var list = ["Change Source", "Change Color", "Move Object","Video Controls"];
 
                     //loop through 2D array to print menu as grid
                     list.forEach(function(item, array){
-                        item.forEach(function(item){
-                            var text = document.createElement("a-text");
-                            setAttributes(text, {
-                                "value": item,
-                                "geometry": "primitive:plane",
-                                "width": "2",
-                                "height": "2",
-                                "align": "center",
-                                "wrapCount": 100
-                            });
-                            text.addEventListener("click", function(){
-                                console.log("You just clicked " + item);
-                                if(item === "Video Controls"){
-                                    if(!videoPlaying){
-                                      element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="curvedvideo" curvedvideo position="0 0 -3" scale=".75 .75 .75"></a-entity>');
-                                      videoPlaying = true;
-                                    }
-                                }
-                            });
-                            element.appendChild(text);
+                        var text = document.createElement("a-text");
+                        setAttributes(text, {
+                            "value": item,
+                            "geometry": "primitive:plane",
+                            "width": "2",
+                            "height": "2",
+                            "align": "center",
+                            "wrapCount": 100
                         });
+                        text.addEventListener("click", function(){
+                            console.log("You just clicked " + item);
+                            if(item === "Video Controls"){
+                                if(!videoPlaying){
+                                  element.sceneEl.insertAdjacentHTML('beforeend','<a-entity id="curvedvideo" curvedvideo position="0 0 -3" scale=".75 .75 .75"></a-entity>');
+                                  videoPlaying = true;
+                                }
+                            }
+                        });
+                        element.appendChild(text);
                     });
                     //Shared Element
                     var sharedEl = document.querySelector(selected);
@@ -443,24 +437,21 @@
                     element.appendChild(shared);
                     element.appendChild(back);
                     element.appendChild(dismiss);
-                    element.insertAdjacentHTML('beforeend','<a-animation attribute="scale" begin="0" from="0 0 0" to=".5 .5 .5"></a-animation>');
+
+                    //Animate menu locally from its wrapper object
+                    element.insertAdjacentHTML('beforeend','<a-animation attribute="scale" from="0 0 0" to=".5 .5 .5"></a-animation>');
+                    element.insertAdjacentHTML('beforeend','<a-animation attribute="position" to=".5 0 -2"></a-animation>');
 
                     function setLayout(){
                         //Set parent object position to users camera for relative adjustments
                         parent.setAttribute("position", {x:cameraPosition.x, y:cameraPosition.y, z:cameraPosition.z});
                         parent.setAttribute("rotation", {x:cameraRotation.x, y:cameraRotation.y, z:cameraRotation.z});
 
-                        //Handle Offset Animations for menu
-                        var animPos = document.createElement("a-animation");
-                        var offsetX = cameraPosition.x + .25;
-                        var moveTo = offsetX + " " + cameraPosition.y + " " + cameraPosition.z;
-                        var moveFrom = cameraPosition.x + " " + cameraPosition.y + " " + cameraPosition.z;
-                        animPos.setAttribute("to", moveTo);
-                        animPos.setAttribute("from", moveFrom);
-                        animPos.setAttribute("attribute", "position");
-                        parent.appendChild(animPos);
                         var animRot = document.createElement("a-animation");
                         var offsetY = cameraRotation.y - 15;
+                        if(cameraRotation.y < 0){
+                            cameraRotation + 30;
+                        }
                         var rotTo = cameraRotation.x + " " + offsetY + " " + cameraRotation.z;
                         var rotFrom = cameraRotation.x + " " + cameraRotation.y + " " + cameraRotation.z;
                         animRot.setAttribute("to", rotTo);
@@ -595,7 +586,34 @@
                     console.log(e);
                     myBox.setAttribute("scale", {x:1, y:1, z:1});
                 });
-            })
+
+                var count = 0;
+                document.addEventListener("keypress", function(e){
+                    console.log(e);
+                    if(e.charCode == 112){
+                        count++;
+                        if(count % 2 == 0){
+                            onStopMocap();
+                        } else {
+                            onPlayMocap();
+                        }
+                    }
+                });
+            });
+
+            function onPlayMocap(){
+                var scene = document.querySelector("a-scene");
+                scene.setAttribute("avatar-replayer", "");
+                console.log("Playing Mocap");
+                console.log(scene);
+            }
+
+            function onStopMocap(){
+                var scene = document.querySelector("a-scene");
+                scene.removeAttribute("avatar-replayer");
+                console.log("Stopping Mocap");
+                console.log(scene);
+            }
         </script>
     </body>
 </html>
