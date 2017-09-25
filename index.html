@@ -368,7 +368,7 @@
                     var camera = element.sceneEl.querySelector("a-camera");
                     var cameraPosition = camera.getAttribute("position");
                     var cameraRotation = camera.getAttribute("rotation");
-                    var parent = element.sceneEl.querySelector("#obmenuwrap");
+                    var parent = element.parentEl;
                     var list = ["Change Source", "Change Color", "Move Object","Video Controls"];
 
                     //loop through 2D array to print menu as grid
@@ -543,7 +543,7 @@
                 <a-entity obj-model="obj: #firstchairobj;" material="src:#ejbluemat;" scale=".25 .25 .25"></a-entity>
             </a-box>
 
-            <a-entity id="many-cube" many-cube position= "1 1.5 .5" grabbable stretchable menuable></a-entity>
+            <a-entity id="many-cube" many-cube position= ".5 1.5 .5" grabbable stretchable menuable></a-entity>
 
             <a-entity id="maincamera" position="0 0 0">
                 <a-camera>
@@ -557,7 +557,7 @@
             <!--<a-image src="#imagestretch" position="0 1 -0" stretchable grabbable></a-image>-->
             <!--<a-entity curvedvideo position="-1 0 -3" rotation="0 2.5 0"></a-entity>-->
             <!--<a-entity id="gridmenu" gridmenu position="-3 2.5 0" rotation="0 90 0"></a-entity>-->
-            <a-text value="Click Me!" color="#BBB" position="-3 .75 .5" rotation="0 90 0"></a-text>
+            <!--<a-text value="Click Me!" color="#BBB" position="-3 .75 .5" rotation="0 90 0"></a-text>-->
         </a-scene>
         <script type="text/javascript">
             //Bad way of handling events - use custom components see cursor-scale component example above scene!
