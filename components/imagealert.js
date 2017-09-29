@@ -47,5 +47,9 @@ AFRAME.registerComponent('image-alert', {
           element.addEventListener("click", function(){
               dismissElement(element);
           });
+
+          setTimeout(function(){
+              dismissElement(element);
+          }, 5000);
       }
   });
