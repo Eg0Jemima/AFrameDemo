@@ -11,13 +11,12 @@ AFRAME.registerComponent('image-alert', {
           var roundUI = document.createElement("a-rounded");
           var text = document.createElement("a-text");
           var image = document.createElement("a-image");
-          var anim = document.createElement("a-animation");
 
           setAttributes(roundUI, {
               "height": "3",
               "width": "10",
               "color": this.data.bgcolor,
-              "opacity": ".8",
+              "opacity": .8,
               "radius":"1",
               "position":"-5, -2.5, 0"
           });
@@ -27,7 +26,7 @@ AFRAME.registerComponent('image-alert', {
               "height": "auto",
               "width": "auto",
               "color": this.data.textcolor,
-              "opacity": "1",
+              "opacity": 1,
               "align": "center",
               "scale": "6 5 0",
               //"geometry":"primitive:plane",
@@ -41,28 +40,39 @@ AFRAME.registerComponent('image-alert', {
               "material": "alphaTest:0.5;"
           });
 
-          setAttributes(anim, {
-              "attribute": "scale",
-              "from": "1 1 1",
-              "to": "0 0 0",
-              "duration": 100000
-          });
-
-          anim.addEventListener("animationend", function(){
-              dismissElement(element);
-          });
-
           roundUI.appendChild(text);
           element.appendChild(image);
           element.appendChild(roundUI);
-          element.appendChild(anim);
 
-          /*element.addEventListener("click", function(){
-              element.appendChild(anim);
+          var coords = { opacity: 1 }; // Start at (0, 0)
+          var tween = new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
+            .to({ opacity: 0 }, 1000) // Move to (300, 200) in 1 second.
+            .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
+            .onUpdate(function() { // Called after tween.js updates 'coords'.
+                // Move 'box' to the position described by 'coords' with a CSS translation.
+                console.log("The current opacity should be");
+                console.log(coords);
+                element.object3D.traverse(function (o) {
+                  if (o.material) {
+                    o.material.opacity = coords.opacity;
+                  }
+                });
+          }).onComplete(endAnimation); // Start the tween immediately.
+
+          element.addEventListener("click", function(){
+              tween.start();
           });
 
+          //if the user doesn't click in 5 seconds, make the welcome vanish
           setTimeout(function(){
-              element.appendChild(anim);
-          }, 5000);*/
+              if(element){
+                  tween.start();
+              }
+          }, 5000);
+
+          function endAnimation(){
+              console.log("The Animation has exited the building!");
+              dismissElement(element);
+          }
       }
   });

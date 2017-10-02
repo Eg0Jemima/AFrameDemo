@@ -35,8 +35,35 @@ AFRAME.registerComponent('alert', {
           roundUI.appendChild(text);
           element.appendChild(roundUI);
 
+          var coords = { opacity: 1 }; // Start at (0, 0)
+          var tween = new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
+            .to({ opacity: 0 }, 1000) // Move to (300, 200) in 1 second.
+            .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
+            .onUpdate(function() { // Called after tween.js updates 'coords'.
+                // Move 'box' to the position described by 'coords' with a CSS translation.
+                console.log("The current opacity should be");
+                console.log(coords);
+                element.object3D.traverse(function (o) {
+                  if (o.material) {
+                    o.material.opacity = coords.opacity;
+                  }
+                });
+          }).onComplete(endAnimation); // Start the tween immediately.
+
           element.addEventListener("click", function(){
-              element.sceneEl.removeChild(element);
+              tween.start();
           });
+
+          //if the user doesn't click in 5 seconds, make the welcome vanish
+          setTimeout(function(){
+              if(element){
+                  tween.start();
+              }
+          }, 5000);
+
+          function endAnimation(){
+              console.log("The Animation has exited the building!");
+              dismissElement(element);
+          }
       }
   });
