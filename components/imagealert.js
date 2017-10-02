@@ -11,6 +11,7 @@ AFRAME.registerComponent('image-alert', {
           var roundUI = document.createElement("a-rounded");
           var text = document.createElement("a-text");
           var image = document.createElement("a-image");
+          var anim = document.createElement("a-animation");
 
           setAttributes(roundUI, {
               "height": "3",
@@ -40,16 +41,28 @@ AFRAME.registerComponent('image-alert', {
               "material": "alphaTest:0.5;"
           });
 
-          roundUI.appendChild(text);
-          element.appendChild(image);
-          element.appendChild(roundUI);
+          setAttributes(anim, {
+              "attribute": "scale",
+              "from": "1 1 1",
+              "to": "0 0 0",
+              "duration": 100000
+          });
 
-          element.addEventListener("click", function(){
+          anim.addEventListener("animationend", function(){
               dismissElement(element);
           });
 
+          roundUI.appendChild(text);
+          element.appendChild(image);
+          element.appendChild(roundUI);
+          element.appendChild(anim);
+
+          /*element.addEventListener("click", function(){
+              element.appendChild(anim);
+          });
+
           setTimeout(function(){
-              dismissElement(element);
-          }, 5000);
+              element.appendChild(anim);
+          }, 5000);*/
       }
   });
