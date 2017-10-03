@@ -1,4 +1,4 @@
-AFRAME.registerComponent('alert', {
+AFRAME.registerComponent('notification', {
       schema: {
           text: {type: 'string', default: ''},
           bgcolor: {type: 'string', default: ''},
@@ -61,7 +61,7 @@ AFRAME.registerComponent('alert', {
           });
 
           function endAnimation(){
-              removeElement(element);
+              element.parentEl.removeChild(element);
           }
       }
   });

@@ -19,6 +19,7 @@
         <script src="components/manycube.js"></script>
         <script src="components/menuable.js"></script>
         <script src="components/objectmenu.js"></script>
+        <script src="components/notification.js"></script>
     </head>
     <body>
         <a-scene avatar-recorder>
@@ -82,7 +83,7 @@
             var scene = document.querySelector("a-scene");
 
             console.log(document.querySelector("a-gui-slider"));
-            document.querySelector('a-scene').addEventListener('loaded', function () {
+            scene.addEventListener('loaded', function () {
                 //Get axis values from controller1
                 controller1.addEventListener("axismove", function(e){
                     console.log("x = " + e.detail.axis[0]);
@@ -119,18 +120,19 @@
             });
 
             function onPlayMocap(){
-                var scene = document.querySelector("a-scene");
                 scene.setAttribute("avatar-replayer", "");
                 console.log("Playing Mocap");
                 console.log(scene);
             }
 
             function onStopMocap(){
-                var scene = document.querySelector("a-scene");
                 scene.removeAttribute("avatar-replayer");
                 console.log("Stopping Mocap");
                 console.log(scene);
             }
+
+            //dynamically add notification
+            scene.querySelector("a-camera").insertAdjacentHTML('beforeend','<a-entity notification="bgcolor:black; text:This is the new sticky notification!; textcolor:white;" position=".04 .035 -.05" scale=".004 .004 .004"></a-entity>');
         </script>
     </body>
 </html>

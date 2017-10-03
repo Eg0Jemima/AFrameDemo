@@ -1,5 +1,5 @@
 //Function to remove elements from the scene within a component
-function dismissElement(element){
+function removeElement(element){
     element.sceneEl.removeChild(element);
 }
 

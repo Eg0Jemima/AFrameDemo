@@ -57,20 +57,20 @@ AFRAME.registerComponent('image-alert', {
                 });
           }).onComplete(endAnimation); // Start the tween immediately.
 
-          element.addEventListener("click", function(){
-              tween.start();
-          });
-
           //if the user doesn't click in 5 seconds, make the welcome vanish
-          setTimeout(function(){
+          var timeout = setTimeout(function(){
               if(element){
                   tween.start();
               }
           }, 5000);
 
+          element.addEventListener("click", function(){
+              clearTimeout(timeout);
+              tween.start();
+          });
+
           function endAnimation(){
-              console.log("The Animation has exited the building!");
-              dismissElement(element);
+              removeElement(element);
           }
       }
   });
