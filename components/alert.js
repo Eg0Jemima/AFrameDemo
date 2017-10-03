@@ -41,8 +41,6 @@ AFRAME.registerComponent('alert', {
             .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
             .onUpdate(function() { // Called after tween.js updates 'coords'.
                 // Move 'box' to the position described by 'coords' with a CSS translation.
-                console.log("The current opacity should be");
-                console.log(coords);
                 element.object3D.traverse(function (o) {
                   if (o.material) {
                     o.material.opacity = coords.opacity;
