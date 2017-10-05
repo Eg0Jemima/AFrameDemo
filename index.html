@@ -20,6 +20,7 @@
         <script src="components/menuable.js"></script>
         <script src="components/objectmenu.js"></script>
         <script src="components/notification.js"></script>
+        <script src="components/stacker.js"></script>
     </head>
     <body>
         <a-scene avatar-recorder>
@@ -130,9 +131,6 @@
                 console.log("Stopping Mocap");
                 console.log(scene);
             }
-
-            //dynamically add notification
-            scene.querySelector("a-camera").insertAdjacentHTML('beforeend','<a-entity notification="bgcolor:black; text:This is the new sticky notification!; textcolor:white;" position=".04 .035 -.05" scale=".004 .004 .004"></a-entity>');
         </script>
     </body>
 </html>

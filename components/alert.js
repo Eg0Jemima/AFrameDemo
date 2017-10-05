@@ -1,8 +1,8 @@
 AFRAME.registerComponent('alert', {
       schema: {
           text: {type: 'string', default: ''},
-          bgcolor: {type: 'string', default: ''},
-          textcolor: {type: 'string', default:''},
+          bgcolor: {type: 'string', default: 'black'},
+          textcolor: {type: 'string', default:'white'},
           duration: {type: 'int', default: 0},
       },
       init: function () {

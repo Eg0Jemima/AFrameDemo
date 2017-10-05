@@ -1,8 +1,8 @@
 AFRAME.registerComponent('notification', {
       schema: {
           text: {type: 'string', default: ''},
-          bgcolor: {type: 'string', default: ''},
-          textcolor: {type: 'string', default:''},
+          bgcolor: {type: 'string', default: 'black'},
+          textcolor: {type: 'string', default:'white'},
           duration: {type: 'int', default: 0},
       },
       init: function () {
@@ -55,13 +55,17 @@ AFRAME.registerComponent('notification', {
               }
           }, 5000);
 
-          element.addEventListener("click", function(){
-              clearTimeout(timeout);
-              tween.start();
-          });
+          element.addEventListener("click", removeNotification);
 
           function endAnimation(){
-              element.parentEl.removeChild(element);
+              if(element.parentEl){
+                  element.parentEl.removeChild(element);
+              }
+          }
+
+          function removeNotification(){
+              clearTimeout(timeout);
+              tween.start();
           }
       }
   });
