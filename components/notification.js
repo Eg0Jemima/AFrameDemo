@@ -46,10 +46,11 @@ AFRAME.registerComponent('notification', {
                     o.material.opacity = coords.opacity;
                   }
                 });
-          }).onComplete(endAnimation); // Start the tween immediately.
+          })
+          //.onComplete(endAnimation); // Start the tween immediately.
 
           //if the user doesn't click in 5 seconds, make the welcome vanish
-          var timeout = setTimeout(function(){
+          /*var timeout = setTimeout(function(){
               if(element){
                   tween.start();
               }
@@ -66,6 +67,6 @@ AFRAME.registerComponent('notification', {
           function removeNotification(){
               clearTimeout(timeout);
               tween.start();
-          }
+          }*/
       }
   });
