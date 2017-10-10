@@ -25,9 +25,6 @@ AFRAME.registerComponent('cursor-scale', {
         clickAnim.setAttribute("dur", "2000");
         clickAnim.setAttribute("to", "360 405 45");
 
-        console.log(mouseEnterAnim);
-        console.log(this.el);
-
         this.el.appendChild(mouseEnterAnim);
         this.el.appendChild(mouseLeaveAnim);
         this.el.appendChild(clickAnim);

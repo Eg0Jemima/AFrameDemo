@@ -9,7 +9,6 @@ AFRAME.registerComponent('gridmenu', {
         var videoPlaying = false;
         var layout = this.data.layout;
         var list = ["Return to Lobby", "Change Ownership", "Place Objects","Mute Self"];
-        console.log("The layout of this grid = " + layout);
 
         //loop through 2D array to print menu as grid
         list.forEach(function(item, array){
@@ -43,7 +42,6 @@ AFRAME.registerComponent('gridmenu', {
                     var listLength = children.length;
                     var width = Math.round(Math.sqrt(listLength)); //x is not growing so will always be shorter
                     var ywidth = Math.ceil(listLength / width); //handles cases where the factors are not perfect example 30
-                    console.log(width);
 
                     var xoff = width / 2 + .5; //starting point is an offset of half the width of the grid + .5 for center multiplied by -1
                     var yoff = ywidth / 2 + .5;
@@ -52,9 +50,8 @@ AFRAME.registerComponent('gridmenu', {
                         var child = children[i];
                         var x = i % width + 1; //adding one makes it go from 1 - 4 instead of 0 to 1 to avoid 0 division
                         var y = Math.floor(i / width) + 1; //adding one makes it go from 1 - 4 instead of 0 to 1 to avoid 0 division
-                        console.log(x + ", " + y);
                         child.setAttribute("position", {x:(x - xoff), y:(y - yoff), z:0});
-                        console.log(child.components.position);
+                        //console.log(child.components.position);
                     }
                     break;
             }
